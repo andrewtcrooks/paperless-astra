@@ -7,20 +7,9 @@ module.exports = {
     'abstract-name-filter-service',
     'abstract-paperless-service',
   ],
-  transformIgnorePatterns: [
-    `<rootDir>/node_modules/.pnpm/(?!.*\\.mjs$|lodash-es)`,
-  ],
+  transformIgnorePatterns: [`<rootDir>/node_modules/(?!.*\\.mjs$|lodash-es)`],
   moduleNameMapper: {
     '^src/(.*)': '<rootDir>/src/$1',
   },
   workerIdleMemoryLimit: '512MB',
-  reporters: [
-    'default',
-    [
-      'jest-junit',
-      {
-        classNameTemplate: '{filepath}/{classname}: {title}',
-      },
-    ],
-  ],
 }

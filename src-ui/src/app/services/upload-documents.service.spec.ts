@@ -9,11 +9,11 @@ import {
 } from '@angular/common/http/testing'
 import { TestBed } from '@angular/core/testing'
 import { environment } from 'src/environments/environment'
-import { UploadDocumentsService } from './upload-documents.service'
 import {
+  ConsumerStatusService,
   FileStatusPhase,
-  WebsocketStatusService,
-} from './websocket-status.service'
+} from './consumer-status.service'
+import { UploadDocumentsService } from './upload-documents.service'
 
 const files = [
   {
@@ -45,14 +45,14 @@ const fileList = {
 describe('UploadDocumentsService', () => {
   let httpTestingController: HttpTestingController
   let uploadDocumentsService: UploadDocumentsService
-  let websocketStatusService: WebsocketStatusService
+  let consumerStatusService: ConsumerStatusService
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [],
       providers: [
         UploadDocumentsService,
-        WebsocketStatusService,
+        ConsumerStatusService,
         provideHttpClient(withInterceptorsFromDi()),
         provideHttpClientTesting(),
       ],
@@ -60,7 +60,7 @@ describe('UploadDocumentsService', () => {
 
     httpTestingController = TestBed.inject(HttpTestingController)
     uploadDocumentsService = TestBed.inject(UploadDocumentsService)
-    websocketStatusService = TestBed.inject(WebsocketStatusService)
+    consumerStatusService = TestBed.inject(ConsumerStatusService)
   })
 
   afterEach(() => {
@@ -80,11 +80,11 @@ describe('UploadDocumentsService', () => {
   it('updates progress during upload and failure', () => {
     uploadDocumentsService.uploadFiles(fileList)
 
-    expect(websocketStatusService.getConsumerStatusNotCompleted()).toHaveLength(
+    expect(consumerStatusService.getConsumerStatusNotCompleted()).toHaveLength(
       2
     )
     expect(
-      websocketStatusService.getConsumerStatus(FileStatusPhase.UPLOADING)
+      consumerStatusService.getConsumerStatus(FileStatusPhase.UPLOADING)
     ).toHaveLength(0)
 
     const req = httpTestingController.match(
@@ -98,7 +98,7 @@ describe('UploadDocumentsService', () => {
     })
 
     expect(
-      websocketStatusService.getConsumerStatus(FileStatusPhase.UPLOADING)
+      consumerStatusService.getConsumerStatus(FileStatusPhase.UPLOADING)
     ).toHaveLength(1)
   })
 
@@ -110,7 +110,7 @@ describe('UploadDocumentsService', () => {
     )
 
     expect(
-      websocketStatusService.getConsumerStatus(FileStatusPhase.FAILED)
+      consumerStatusService.getConsumerStatus(FileStatusPhase.FAILED)
     ).toHaveLength(0)
 
     req[0].flush(
@@ -122,7 +122,7 @@ describe('UploadDocumentsService', () => {
     )
 
     expect(
-      websocketStatusService.getConsumerStatus(FileStatusPhase.FAILED)
+      consumerStatusService.getConsumerStatus(FileStatusPhase.FAILED)
     ).toHaveLength(1)
 
     uploadDocumentsService.uploadFiles(fileList)
@@ -140,7 +140,7 @@ describe('UploadDocumentsService', () => {
     )
 
     expect(
-      websocketStatusService.getConsumerStatus(FileStatusPhase.FAILED)
+      consumerStatusService.getConsumerStatus(FileStatusPhase.FAILED)
     ).toHaveLength(2)
   })
 

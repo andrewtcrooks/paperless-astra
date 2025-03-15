@@ -43,6 +43,7 @@ import { DocumentTitlePipe } from 'src/app/pipes/document-title.pipe'
 import { DocumentTypeNamePipe } from 'src/app/pipes/document-type-name.pipe'
 import { StoragePathNamePipe } from 'src/app/pipes/storage-path-name.pipe'
 import { UsernamePipe } from 'src/app/pipes/username.pipe'
+import { ConsumerStatusService } from 'src/app/services/consumer-status.service'
 import { DocumentListViewService } from 'src/app/services/document-list-view.service'
 import { HotKeyService } from 'src/app/services/hot-key.service'
 import { OpenDocumentsService } from 'src/app/services/open-documents.service'
@@ -50,7 +51,6 @@ import { PermissionsService } from 'src/app/services/permissions.service'
 import { SavedViewService } from 'src/app/services/rest/saved-view.service'
 import { SettingsService } from 'src/app/services/settings.service'
 import { ToastService } from 'src/app/services/toast.service'
-import { WebsocketStatusService } from 'src/app/services/websocket-status.service'
 import {
   filterRulesDiffer,
   isFullTextFilterRule,
@@ -113,7 +113,7 @@ export class DocumentListComponent
     private router: Router,
     private toastService: ToastService,
     private modalService: NgbModal,
-    private websocketStatusService: WebsocketStatusService,
+    private consumerStatusService: ConsumerStatusService,
     public openDocumentsService: OpenDocumentsService,
     public settingsService: SettingsService,
     private hotKeyService: HotKeyService,
@@ -234,16 +234,12 @@ export class DocumentListComponent
   }
 
   ngOnInit(): void {
-    this.websocketStatusService
+    this.consumerStatusService
       .onDocumentConsumptionFinished()
       .pipe(takeUntil(this.unsubscribeNotifier))
       .subscribe(() => {
         this.list.reload()
       })
-
-    this.websocketStatusService.onDocumentDeleted().subscribe(() => {
-      this.list.reload()
-    })
 
     this.route.paramMap
       .pipe(
@@ -377,20 +373,12 @@ export class DocumentListComponent
       this.savedViewService
         .patch(savedView)
         .pipe(first())
-        .subscribe({
-          next: (view) => {
-            this.unmodifiedSavedView = view
-            this.toastService.showInfo(
-              $localize`View "${this.list.activeSavedViewTitle}" saved successfully.`
-            )
-            this.unmodifiedFilterRules = this.list.filterRules
-          },
-          error: (err) => {
-            this.toastService.showError(
-              $localize`Failed to save view "${this.list.activeSavedViewTitle}".`,
-              err
-            )
-          },
+        .subscribe((view) => {
+          this.unmodifiedSavedView = view
+          this.toastService.showInfo(
+            $localize`View "${this.list.activeSavedViewTitle}" saved successfully.`
+          )
+          this.unmodifiedFilterRules = this.list.filterRules
         })
     }
   }

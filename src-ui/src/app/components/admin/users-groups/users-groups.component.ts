@@ -129,16 +129,13 @@ export class UsersAndGroupsComponent
       this.usersService.delete(user).subscribe({
         next: () => {
           modal.close()
-          this.toastService.showInfo($localize`Deleted user "${user.username}"`)
+          this.toastService.showInfo($localize`Deleted user`)
           this.usersService.listAll().subscribe((r) => {
             this.users = r.results
           })
         },
         error: (e) => {
-          this.toastService.showError(
-            $localize`Error deleting user "${user.username}".`,
-            e
-          )
+          this.toastService.showError($localize`Error deleting user.`, e)
         },
       })
     })
@@ -182,16 +179,13 @@ export class UsersAndGroupsComponent
       this.groupsService.delete(group).subscribe({
         next: () => {
           modal.close()
-          this.toastService.showInfo($localize`Deleted group "${group.name}"`)
+          this.toastService.showInfo($localize`Deleted group`)
           this.groupsService.listAll().subscribe((r) => {
             this.groups = r.results
           })
         },
         error: (e) => {
-          this.toastService.showError(
-            $localize`Error deleting group "${group.name}".`,
-            e
-          )
+          this.toastService.showError($localize`Error deleting group.`, e)
         },
       })
     })

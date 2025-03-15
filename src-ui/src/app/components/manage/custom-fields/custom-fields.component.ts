@@ -16,8 +16,6 @@ import { IfPermissionsDirective } from 'src/app/directives/if-permissions.direct
 import { DocumentListViewService } from 'src/app/services/document-list-view.service'
 import { PermissionsService } from 'src/app/services/permissions.service'
 import { CustomFieldsService } from 'src/app/services/rest/custom-fields.service'
-import { DocumentService } from 'src/app/services/rest/document.service'
-import { SavedViewService } from 'src/app/services/rest/saved-view.service'
 import { SettingsService } from 'src/app/services/settings.service'
 import { ToastService } from 'src/app/services/toast.service'
 import { ConfirmDialogComponent } from '../../common/confirm-dialog/confirm-dialog.component'
@@ -50,9 +48,7 @@ export class CustomFieldsComponent
     private modalService: NgbModal,
     private toastService: ToastService,
     private documentListViewService: DocumentListViewService,
-    private settingsService: SettingsService,
-    private documentService: DocumentService,
-    private savedViewService: SavedViewService
+    private settingsService: SettingsService
   ) {
     super()
   }
@@ -89,7 +85,6 @@ export class CustomFieldsComponent
         this.toastService.showInfo($localize`Saved field "${newField.name}".`)
         this.customFieldsService.clearCache()
         this.settingsService.initializeDisplayFields()
-        this.documentService.reload()
         this.reload()
       })
     modal.componentInstance.failed
@@ -113,18 +108,13 @@ export class CustomFieldsComponent
       this.customFieldsService.delete(field).subscribe({
         next: () => {
           modal.close()
-          this.toastService.showInfo($localize`Deleted field "${field.name}"`)
+          this.toastService.showInfo($localize`Deleted field`)
           this.customFieldsService.clearCache()
           this.settingsService.initializeDisplayFields()
-          this.documentService.reload()
-          this.savedViewService.reload()
           this.reload()
         },
         error: (e) => {
-          this.toastService.showError(
-            $localize`Error deleting field "${field.name}".`,
-            e
-          )
+          this.toastService.showError($localize`Error deleting field.`, e)
         },
       })
     })

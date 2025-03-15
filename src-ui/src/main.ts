@@ -34,7 +34,6 @@ import {
   arrowRightShort,
   arrowUpRight,
   asterisk,
-  bell,
   bodyText,
   boxArrowUp,
   boxArrowUpRight,
@@ -107,13 +106,11 @@ import {
   personFillLock,
   personLock,
   personSquare,
-  playFill,
   plus,
   plusCircle,
   questionCircle,
   scissors,
   search,
-  send,
   slashCircle,
   sliders2Vertical,
   sortAlphaDown,
@@ -183,7 +180,6 @@ import localeSv from '@angular/common/locales/sv'
 import localeTr from '@angular/common/locales/tr'
 import localeUk from '@angular/common/locales/uk'
 import localeZh from '@angular/common/locales/zh'
-import localeZhHant from '@angular/common/locales/zh-Hant'
 import { CorrespondentNamePipe } from './app/pipes/correspondent-name.pipe'
 import { DocumentTypeNamePipe } from './app/pipes/document-type-name.pipe'
 import { StoragePathNamePipe } from './app/pipes/storage-path-name.pipe'
@@ -220,7 +216,6 @@ registerLocaleData(localeSv)
 registerLocaleData(localeTr)
 registerLocaleData(localeUk)
 registerLocaleData(localeZh)
-registerLocaleData(localeZhHant)
 
 function initializeApp(settings: SettingsService) {
   return () => {
@@ -240,7 +235,6 @@ const icons = {
   arrowRightShort,
   arrowUpRight,
   asterisk,
-  bell,
   braces,
   bodyText,
   boxArrowUp,
@@ -313,13 +307,11 @@ const icons = {
   personFillLock,
   personLock,
   personSquare,
-  playFill,
   plus,
   plusCircle,
   questionCircle,
   scissors,
   search,
-  send,
   slashCircle,
   sliders2Vertical,
   sortAlphaDown,

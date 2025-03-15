@@ -86,17 +86,12 @@ export class TrashComponent
         modal.componentInstance.buttonsEnabled = false
         this.trashService.emptyTrash([document.id]).subscribe({
           next: () => {
-            this.toastService.showInfo(
-              $localize`Document "${document.title}" deleted`
-            )
+            this.toastService.showInfo($localize`Document deleted`)
             modal.close()
             this.reload()
           },
           error: (err) => {
-            this.toastService.showError(
-              $localize`Error deleting document "${document.title}"`,
-              err
-            )
+            this.toastService.showError($localize`Error deleting document`, err)
             modal.close()
           },
         })
@@ -141,7 +136,7 @@ export class TrashComponent
     this.trashService.restoreDocuments([document.id]).subscribe({
       next: () => {
         this.toastService.show({
-          content: $localize`Document "${document.title}" restored`,
+          content: $localize`Document restored`,
           delay: 5000,
           actionName: $localize`Open document`,
           action: () => {
@@ -151,10 +146,7 @@ export class TrashComponent
         this.reload()
       },
       error: (err) => {
-        this.toastService.showError(
-          $localize`Error restoring document "${document.title}"`,
-          err
-        )
+        this.toastService.showError($localize`Error restoring document`, err)
       },
     })
   }

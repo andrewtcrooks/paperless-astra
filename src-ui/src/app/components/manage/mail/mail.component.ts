@@ -200,9 +200,7 @@ export class MailComponent
       this.mailAccountService.delete(account).subscribe({
         next: () => {
           modal.close()
-          this.toastService.showInfo(
-            $localize`Deleted mail account "${account.name}"`
-          )
+          this.toastService.showInfo($localize`Deleted mail account`)
           this.mailAccountService.clearCache()
           this.mailAccountService
             .listAll(null, null, { full_perms: true })
@@ -212,7 +210,7 @@ export class MailComponent
         },
         error: (e) => {
           this.toastService.showError(
-            $localize`Error deleting mail account "${account.name}".`,
+            $localize`Error deleting mail account.`,
             e
           )
         },
@@ -223,15 +221,10 @@ export class MailComponent
   processAccount(account: MailAccount) {
     this.mailAccountService.processAccount(account).subscribe({
       next: () => {
-        this.toastService.showInfo(
-          $localize`Processing mail account "${account.name}"`
-        )
+        this.toastService.showInfo($localize`Processing mail account`)
       },
       error: (e) => {
-        this.toastService.showError(
-          $localize`Error processing mail account "${account.name}"`,
-          e
-        )
+        this.toastService.showError($localize`Error processing mail account`, e)
       },
     })
   }
@@ -279,10 +272,7 @@ export class MailComponent
         )
       },
       error: (e) => {
-        this.toastService.showError(
-          $localize`Error toggling rule "${rule.name}".`,
-          e
-        )
+        this.toastService.showError($localize`Error toggling rule.`, e)
       },
     })
   }
@@ -301,9 +291,7 @@ export class MailComponent
       this.mailRuleService.delete(rule).subscribe({
         next: () => {
           modal.close()
-          this.toastService.showInfo(
-            $localize`Deleted mail rule "${rule.name}"`
-          )
+          this.toastService.showInfo($localize`Deleted mail rule`)
           this.mailRuleService.clearCache()
           this.mailRuleService
             .listAll(null, null, { full_perms: true })
@@ -312,10 +300,7 @@ export class MailComponent
             })
         },
         error: (e) => {
-          this.toastService.showError(
-            $localize`Error deleting mail rule "${rule.name}".`,
-            e
-          )
+          this.toastService.showError($localize`Error deleting mail rule.`, e)
         },
       })
     })

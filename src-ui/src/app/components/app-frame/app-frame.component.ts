@@ -48,7 +48,6 @@ import { ProfileEditDialogComponent } from '../common/profile-edit-dialog/profil
 import { DocumentDetailComponent } from '../document-detail/document-detail.component'
 import { ComponentWithPermissions } from '../with-permissions/with-permissions.component'
 import { GlobalSearchComponent } from './global-search/global-search.component'
-import { ToastsDropdownComponent } from './toasts-dropdown/toasts-dropdown.component'
 
 @Component({
   selector: 'pngx-app-frame',
@@ -58,7 +57,6 @@ import { ToastsDropdownComponent } from './toasts-dropdown/toasts-dropdown.compo
     GlobalSearchComponent,
     DocumentTitlePipe,
     IfPermissionsDirective,
-    ToastsDropdownComponent,
     RouterModule,
     NgClass,
     NgbDropdownModule,

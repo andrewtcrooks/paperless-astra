@@ -1,11 +1,16 @@
 import { Options } from '@popperjs/core'
 
-export function pngxPopperOptions(config: Partial<Options>): Partial<Options> {
-  const preventOverflowModifier = config.modifiers.find(
+export function popperOptionsReenablePreventOverflow(
+  config: Partial<Options>
+): Partial<Options> {
+  config.modifiers = config.modifiers?.filter(
+    (m) => !(m.name === 'preventOverflow' && m.fn?.length === 0)
+  )
+  const ogPreventOverflowModifier = config.modifiers.find(
     (m) => m.name === 'preventOverflow'
   )
-  if (preventOverflowModifier) {
-    preventOverflowModifier.options = {
+  if (ogPreventOverflowModifier) {
+    ogPreventOverflowModifier.options = {
       padding: 10,
     }
   }

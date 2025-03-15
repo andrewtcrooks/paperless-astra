@@ -1,0 +1,254 @@
+# 🚀 Paperless-Astra Project Rules
+
+This file contains the **rules and guidelines** for the **Paperless-Astra project**, 
+including Model Context Protocol (MCP) instructions, development standards, and deployment configurations.
+
+## 📌 Project Overview
+
+**Paperless-Astra** is a **unified fork** that **combines** the functionalities of **Paperless-NGX, 
+Paperless-GPT, and ChromaDB** into a **single system**. This project **enhances document management 
+and search capabilities** by **integrating advanced vector search, local AI processing, and 
+Model Context Protocol (MCP) support** for intelligent document retrieval.
+
+**Paperless-Astra replaces Paperless-NGX** as a next-generation document management solution by:
+
+- **Integrating ChromaDB** for **semantic vector search** to improve document retrieval accuracy.
+- **Incorporating Paperless-GPT** to enable **LLM-assisted tagging, and OCR**.
+- **Adding a built-in Model Context Protocol (MCP) server**, allowing **AI models (Claude, OpenAI, etc...) 
+and **AI Code editors (Cursor, Windsurf, etc...)** to interact with document metadata and embeddings.
+- **Providing an API that supports both local and cloud-based AI models** for document processing(tagging and OCR).
+- **Providing an API that supports both local and cloud-based AI models** for reasoning.
+
+This means **Paperless-Astra fully replaces the functionality of Paperless-NGX and Paperless-GPT**, 
+while **enhancing** their features with **vector embeddings, AI-driven insights, 
+and seamless LLM integration**.
+
+Paperless-Astra retains **the original Docker Compose-based deployment structure** from Paperless-NGX. 
+This allows users to **explicitly define versions** for key services, including:
+
+- **Tika** (document text extraction)
+- **Gotenberg** (PDF processing)
+- **PostgreSQL** (database backend)
+- **ChromaDB** (new vector search backend)
+
+Users must **ensure a running ChromaDB container** in their Docker setup, as **Paperless-Astra will 
+directly rely on it** rather than specifying a version via environment variables.
+
+---
+
+## 📌 Key Components
+
+### 1️⃣ Multi-LLM Support (Local & Cloud)
+
+- Connects to **LM Studio for Local LLM Models**.
+- Supports **OpenAI, Claude, Mistral, etc., via API**.
+- Allows users to **configure API endpoints and keys** manually.
+
+### 2️⃣ Intelligent Model Switching (Task-Based)
+
+- **Selects the best model** based on the task type:
+  - **Tagging (Metadata Extraction & Summarization)** → Users can **select either a local LM Studio model or a cloud model like Claude/OpenAI**.
+  - **OCR with Vision (Processing Images, PDFs)** → Users can **choose a local Vision LLM (e.g., LLaVA, GPT-4V, etc.) from LM Studio or a cloud-based alternative**.
+  - **Reasoning (Motion Drafting, Legal Inferences)** → Defaults to **Claude/OpenAI** but allows the use of a **local LM Studio model** if preferred.
+- **Optimizes model switching** by:
+  - **Batching similar tasks** to complete them before switching.
+  - **Keeping a single model loaded** for as long as possible before switching.
+  - **Allowing users to control which tasks use local vs. cloud models**, ensuring cost efficiency while maintaining flexibility.
+
+### 3️⃣ Model Management (LM Studio / Ollama)
+
+- **Supports both LM Studio and standalone Ollama**, allowing users to choose their preferred setup.  
+- **Lists available models** from the selected backend for easy selection.  
+- **Explicitly unloads the current model before loading a new one** to manage memory efficiently (if supported).  
+- Uses **Ollama's API to ensure only one model runs at a time**, preventing unnecessary resource usage when switching models.  
+- Users can **assign specific models to different tasks** to optimize efficiency and reduce unnecessary switching.  
+
+
+## 📌 Development Guidelines
+
+### 1️⃣ Code Style
+
+- Follow **PEP 8** guidelines for Python code.
+- Use **type hints (`def func(name: str) -> dict`)** for all new functions.
+- **Document every function & class** with clear docstrings.
+- Keep functions **single-purpose and modular** for maintainability.
+
+### 2️⃣ Testing
+
+- Write **unit tests** for all new functionality.
+- Ensure **edge cases** are tested, particularly for **vector searches**.
+- Follow existing test patterns in **`tests/`**.
+
+### 3️⃣ Documentation
+
+- Update **API docs** whenever new endpoints are added.
+- Document **config options** (e.g., enabling/disabling vector search).
+- Provide **code examples** for **API usage** and **configuration settings**.
+
+### 4️⃣ Version Control
+
+- Use **descriptive commit messages** (`feat: added vector search API`).
+- Develop **new features in branches** before merging into `main`.
+- Submit **Pull Requests (PRs) for review** before merging changes.
+
+---
+
+## 📌 Configuration Options
+
+Paperless-Astra uses these additional environment variables to control settings (in addition to the original paperless-ngx env variables):
+
+| **Variable**                      | **Description**                         | **Default**                |
+| ---------------------------------- | --------------------------------------- | -------------------------- |
+| `PAPERLESS_VECTOR_SEARCH_ENABLED` | Enables ChromaDB vector search | `1` |
+| `PAPERLESS_CHROMA_DB_ENDPOINT` | ChromaDB connection URL | `http://chromadb:8000` |
+| `PAPERLESS_MCP_API_KEY` | API key for external LLM access | *None* (optional) |
+
+> **Note:**  
+> - ChromaDB manages its own database storage inside its container.  
+> - Paperless-Astra only needs the **endpoint** in the format `http://<container-name>:<port>` to connect.  
+> - `PAPERLESS_CHROMA_DB_DIR` is no longer needed, as database storage is handled by ChromaDB itself within Docker Compose.
+> - Boolean environment variables use `1` for true and `0` for false.
+> - All LLM configuration (providers, models, API keys) is managed through the web interface.
+
+---
+
+## 📌 Docker Deployment
+
+Paperless-Astra is designed to be deployed using **Docker Compose**, allowing fine-grained control over service versions.
+
+### **Example `docker-compose.yml` Configuration**
+
+```yaml
+version: '3.8'
+
+services:
+  broker:
+    image: redis:7
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+    volumes:
+      - redisdata:/data
+
+  db:
+    image: postgres:16
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+    volumes:
+      - dbdata:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: paperless
+      POSTGRES_USER: paperless
+      POSTGRES_PASSWORD: paperless
+
+  tika:
+    image: apache/tika:2.9.1
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9998/tika"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  gotenberg:
+    image: gotenberg/gotenberg:8.0.3
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    command:
+      - "gotenberg"
+      - "--chromium-disable-javascript=true"
+      - "--chromium-allow-list=file:///tmp/.*"
+
+  chromadb:
+    image: chromadb/chroma:latest
+    restart: unless-stopped
+    volumes:
+      - chromadata:/chroma/data
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/v1/heartbeat"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  webserver:
+    image: ghcr.io/paperless-astra/paperless-astra:latest
+    restart: unless-stopped
+    depends_on:
+      - broker
+      - db
+      - tika
+      - gotenberg
+      - chromadb
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    volumes:
+      - data:/usr/src/paperless/data
+      - media:/usr/src/paperless/media
+      - ./consume:/usr/src/paperless/consume
+      - ./export:/usr/src/paperless/export
+    environment:
+      PAPERLESS_REDIS: redis://broker:6379
+      PAPERLESS_DBHOST: db
+      PAPERLESS_DBPORT: 5432
+      PAPERLESS_DBNAME: paperless
+      PAPERLESS_DBUSER: paperless
+      PAPERLESS_DBPASS: paperless
+      PAPERLESS_URL: http://localhost:8000
+      PAPERLESS_SECRET_KEY: change-me
+      PAPERLESS_TIME_ZONE: UTC
+      PAPERLESS_OCR_LANGUAGE: eng
+      PAPERLESS_TIKA_ENABLED: 1
+      PAPERLESS_TIKA_ENDPOINT: http://tika:9998
+      PAPERLESS_TIKA_GOTENBERG_ENDPOINT: http://gotenberg:3000
+      PAPERLESS_VECTOR_SEARCH_ENABLED: 1
+      PAPERLESS_CHROMA_DB_ENDPOINT: http://chromadb:8000
+    ports:
+      - "8000:8000"
+
+volumes:
+  data:
+  media:
+  dbdata:
+  redisdata:
+  chromadata:
+
+## 📌 Cursor Rules Integration  
+
+### **Automated .cursorrules Updates**  
+- The Paperless-Astra agent in Cursor should **track requested features** and suggest relevant `.cursorrules` updates.  
+- Changes should be **offered automatically** to ensure **alignment with project structure and deployment needs**.  
+
+**Example .cursorrules Update Behavior:**  
+- If a new API feature is requested → Suggest adding API structure validation.  
+- If a Docker setting is modified → Ensure environment variables match Docker Compose expectations.  
+- If AI model support changes → Validate that AI routing logic is reflected in `.cursorrules`.  
+
+### **Request for Cursor Automation**
+**Cursor Agent should:**  
+1. **Detect and suggest** `.cursorrules` modifications when project requirements change.  
+2. **Prompt the user** to apply the updates automatically.  
+3. **Ensure all updates align** with the latest `docker-compose.yml` and project configurations.  
+
+
+## 📌 Final Notes
+
+Paperless-Astra provides:
+- Advanced document management with PostgreSQL, MariaDB, or SQLite backend
+- AI-powered OCR and tagging using local or cloud LLMs
+- Vector-based search through ChromaDB integration
+- Flexible deployment options with Docker Compose
+- Support for both local and cloud AI models

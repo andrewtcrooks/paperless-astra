@@ -570,10 +570,6 @@ table.table {
   color: var(--bs-body-color);
 }
 
-.toast {
-  --bs-toast-max-width: var(--pngx-toast-max-width);
-}
-
 .alert-primary {
   --bs-alert-color: var(--bs-primary);
   --bs-alert-bg: var(--pngx-primary-faded);
@@ -767,8 +763,6 @@ canvas.hiddenCanvasElement {
 }
 
 .document-card {
-  overflow: hidden;
-
   .card-footer i-bs svg {
     vertical-align: middle;
   }

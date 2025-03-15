@@ -62,8 +62,6 @@ export class DateComponent
   @Output()
   filterDocuments = new EventEmitter<NgbDateStruct[]>()
 
-  public readonly today: string = new Date().toISOString().split('T')[0]
-
   getSuggestions() {
     return this.suggestions == null
       ? []

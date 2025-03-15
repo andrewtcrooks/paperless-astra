@@ -1,10 +1,11 @@
 import { Options } from '@popperjs/core'
-import { pngxPopperOptions } from './popper-options'
+import { popperOptionsReenablePreventOverflow } from './popper-options'
 
 describe('popperOptionsReenablePreventOverflow', () => {
-  it('should return the config with add padding', () => {
+  it('should return the config without the empty fun preventOverflow, add padding to other', () => {
     const config: Partial<Options> = {
       modifiers: [
+        { name: 'preventOverflow', fn: function () {} },
         {
           name: 'preventOverflow',
           fn: function (arg0) {
@@ -14,7 +15,7 @@ describe('popperOptionsReenablePreventOverflow', () => {
       ],
     }
 
-    const result = pngxPopperOptions(config)
+    const result = popperOptionsReenablePreventOverflow(config)
 
     expect(result.modifiers.length).toBe(1)
     expect(result.modifiers[0].name).toBe('preventOverflow')

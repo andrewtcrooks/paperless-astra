@@ -142,17 +142,12 @@ export class WorkflowsComponent
       this.workflowService.delete(workflow).subscribe({
         next: () => {
           modal.close()
-          this.toastService.showInfo(
-            $localize`Deleted workflow "${workflow.name}".`
-          )
+          this.toastService.showInfo($localize`Deleted workflow`)
           this.workflowService.clearCache()
           this.reload()
         },
         error: (e) => {
-          this.toastService.showError(
-            $localize`Error deleting workflow "${workflow.name}".`,
-            e
-          )
+          this.toastService.showError($localize`Error deleting workflow.`, e)
         },
       })
     })
@@ -163,17 +158,14 @@ export class WorkflowsComponent
       next: () => {
         this.toastService.showInfo(
           workflow.enabled
-            ? $localize`Enabled workflow "${workflow.name}"`
-            : $localize`Disabled workflow "${workflow.name}"`
+            ? $localize`Enabled workflow`
+            : $localize`Disabled workflow`
         )
         this.workflowService.clearCache()
         this.reload()
       },
       error: (e) => {
-        this.toastService.showError(
-          $localize`Error toggling workflow "${workflow.name}".`,
-          e
-        )
+        this.toastService.showError($localize`Error toggling workflow.`, e)
       },
     })
   }

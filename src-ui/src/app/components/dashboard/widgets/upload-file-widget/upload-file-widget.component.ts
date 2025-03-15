@@ -4,6 +4,7 @@ import { RouterModule } from '@angular/router'
 import {
   NgbAlert,
   NgbAlertModule,
+  NgbCollapseModule,
   NgbProgressbarModule,
 } from '@ng-bootstrap/ng-bootstrap'
 import { NgxBootstrapIconsModule } from 'ngx-bootstrap-icons'
@@ -11,14 +12,16 @@ import { TourNgBootstrapModule } from 'ngx-ui-tour-ng-bootstrap'
 import { ComponentWithPermissions } from 'src/app/components/with-permissions/with-permissions.component'
 import { SETTINGS_KEYS } from 'src/app/data/ui-settings'
 import { IfPermissionsDirective } from 'src/app/directives/if-permissions.directive'
-import { SettingsService } from 'src/app/services/settings.service'
-import { UploadDocumentsService } from 'src/app/services/upload-documents.service'
 import {
+  ConsumerStatusService,
   FileStatus,
   FileStatusPhase,
-  WebsocketStatusService,
-} from 'src/app/services/websocket-status.service'
+} from 'src/app/services/consumer-status.service'
+import { SettingsService } from 'src/app/services/settings.service'
+import { UploadDocumentsService } from 'src/app/services/upload-documents.service'
 import { WidgetFrameComponent } from '../widget-frame/widget-frame.component'
+
+const MAX_ALERTS = 5
 
 @Component({
   selector: 'pngx-upload-file-widget',
@@ -31,16 +34,19 @@ import { WidgetFrameComponent } from '../widget-frame/widget-frame.component'
     NgTemplateOutlet,
     RouterModule,
     NgbAlertModule,
+    NgbCollapseModule,
     NgbProgressbarModule,
     NgxBootstrapIconsModule,
     TourNgBootstrapModule,
   ],
 })
 export class UploadFileWidgetComponent extends ComponentWithPermissions {
+  alertsExpanded = false
+
   @ViewChildren(NgbAlert) alerts: QueryList<NgbAlert>
 
   constructor(
-    private websocketStatusService: WebsocketStatusService,
+    private consumerStatusService: ConsumerStatusService,
     private uploadDocumentsService: UploadDocumentsService,
     public settingsService: SettingsService
   ) {
@@ -48,13 +54,13 @@ export class UploadFileWidgetComponent extends ComponentWithPermissions {
   }
 
   getStatus() {
-    return this.websocketStatusService.getConsumerStatus()
+    return this.consumerStatusService.getConsumerStatus().slice(0, MAX_ALERTS)
   }
 
   getStatusSummary() {
     let strings = []
     let countUploadingAndProcessing =
-      this.websocketStatusService.getConsumerStatusNotCompleted().length
+      this.consumerStatusService.getConsumerStatusNotCompleted().length
     let countFailed = this.getStatusFailed().length
     let countSuccess = this.getStatusSuccess().length
     if (countUploadingAndProcessing > 0) {
@@ -71,24 +77,28 @@ export class UploadFileWidgetComponent extends ComponentWithPermissions {
     )
   }
 
+  getStatusHidden() {
+    if (this.consumerStatusService.getConsumerStatus().length < MAX_ALERTS)
+      return []
+    else return this.consumerStatusService.getConsumerStatus().slice(MAX_ALERTS)
+  }
+
   getStatusUploading() {
-    return this.websocketStatusService.getConsumerStatus(
+    return this.consumerStatusService.getConsumerStatus(
       FileStatusPhase.UPLOADING
     )
   }
 
   getStatusFailed() {
-    return this.websocketStatusService.getConsumerStatus(FileStatusPhase.FAILED)
+    return this.consumerStatusService.getConsumerStatus(FileStatusPhase.FAILED)
   }
 
   getStatusSuccess() {
-    return this.websocketStatusService.getConsumerStatus(
-      FileStatusPhase.SUCCESS
-    )
+    return this.consumerStatusService.getConsumerStatus(FileStatusPhase.SUCCESS)
   }
 
   getStatusCompleted() {
-    return this.websocketStatusService.getConsumerStatusCompleted()
+    return this.consumerStatusService.getConsumerStatusCompleted()
   }
 
   getTotalUploadProgress() {
@@ -124,12 +134,12 @@ export class UploadFileWidgetComponent extends ComponentWithPermissions {
   }
 
   dismiss(status: FileStatus) {
-    this.websocketStatusService.dismiss(status)
+    this.consumerStatusService.dismiss(status)
   }
 
   dismissCompleted() {
     this.getStatusCompleted().forEach((status) =>
-      this.websocketStatusService.dismiss(status)
+      this.consumerStatusService.dismiss(status)
     )
   }
 

@@ -19,7 +19,6 @@ import { allIcons, NgxBootstrapIconsModule } from 'ngx-bootstrap-icons'
 import { routes } from 'src/app/app-routing.module'
 import {
   PaperlessTask,
-  PaperlessTaskName,
   PaperlessTaskStatus,
   PaperlessTaskType,
 } from 'src/app/data/paperless-task'
@@ -40,8 +39,7 @@ const tasks: PaperlessTask[] = [
     task_file_name: 'test.pdf',
     date_created: new Date('2023-03-01T10:26:03.093116Z'),
     date_done: new Date('2023-03-01T10:26:07.223048Z'),
-    type: PaperlessTaskType.Auto,
-    task_name: PaperlessTaskName.ConsumeFile,
+    type: PaperlessTaskType.File,
     status: PaperlessTaskStatus.Failed,
     result: 'test.pd: Not consuming test.pdf: It is a duplicate of test (#100)',
     acknowledged: false,
@@ -53,8 +51,7 @@ const tasks: PaperlessTask[] = [
     task_file_name: '191092.pdf',
     date_created: new Date('2023-03-01T09:26:03.093116Z'),
     date_done: new Date('2023-03-01T09:26:07.223048Z'),
-    type: PaperlessTaskType.Auto,
-    task_name: PaperlessTaskName.ConsumeFile,
+    type: PaperlessTaskType.File,
     status: PaperlessTaskStatus.Failed,
     result:
       '191092.pd: Not consuming 191092.pdf: It is a duplicate of 191092 (#311)',
@@ -67,8 +64,7 @@ const tasks: PaperlessTask[] = [
     task_file_name: 'Scan Jun 6, 2023 at 3.19 PM.pdf',
     date_created: new Date('2023-06-06T15:22:05.722323-07:00'),
     date_done: new Date('2023-06-06T15:22:14.564305-07:00'),
-    type: PaperlessTaskType.Auto,
-    task_name: PaperlessTaskName.ConsumeFile,
+    type: PaperlessTaskType.File,
     status: PaperlessTaskStatus.Pending,
     result: null,
     acknowledged: false,
@@ -80,8 +76,7 @@ const tasks: PaperlessTask[] = [
     task_file_name: 'paperless-mail-l4dkg8ir',
     date_created: new Date('2023-06-04T11:24:32.898089-07:00'),
     date_done: new Date('2023-06-04T11:24:44.678605-07:00'),
-    type: PaperlessTaskType.Auto,
-    task_name: PaperlessTaskName.ConsumeFile,
+    type: PaperlessTaskType.File,
     status: PaperlessTaskStatus.Complete,
     result: 'Success. New document id 422 created',
     acknowledged: false,
@@ -93,8 +88,7 @@ const tasks: PaperlessTask[] = [
     task_file_name: 'onlinePaymentSummary.pdf',
     date_created: new Date('2023-06-01T13:49:51.631305-07:00'),
     date_done: new Date('2023-06-01T13:49:54.190220-07:00'),
-    type: PaperlessTaskType.Auto,
-    task_name: PaperlessTaskName.ConsumeFile,
+    type: PaperlessTaskType.File,
     status: PaperlessTaskStatus.Complete,
     result: 'Success. New document id 421 created',
     acknowledged: false,
@@ -106,8 +100,7 @@ const tasks: PaperlessTask[] = [
     task_file_name: 'paperless-mail-_rrpmqk6',
     date_created: new Date('2023-06-07T02:54:35.694916Z'),
     date_done: null,
-    type: PaperlessTaskType.Auto,
-    task_name: PaperlessTaskName.ConsumeFile,
+    type: PaperlessTaskType.File,
     status: PaperlessTaskStatus.Started,
     result: null,
     acknowledged: false,
@@ -162,9 +155,7 @@ describe('TasksComponent', () => {
     jest.useFakeTimers()
     fixture.detectChanges()
     httpTestingController
-      .expectOne(
-        `${environment.apiBaseUrl}tasks/?task_name=consume_file&acknowledged=false`
-      )
+      .expectOne(`${environment.apiBaseUrl}tasks/`)
       .flush(tasks)
   })
 

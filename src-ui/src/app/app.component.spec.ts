@@ -18,20 +18,20 @@ import { ToastsComponent } from './components/common/toasts/toasts.component'
 import { FileDropComponent } from './components/file-drop/file-drop.component'
 import { DirtySavedViewGuard } from './guards/dirty-saved-view.guard'
 import { PermissionsGuard } from './guards/permissions.guard'
+import {
+  ConsumerStatusService,
+  FileStatus,
+} from './services/consumer-status.service'
 import { HotKeyService } from './services/hot-key.service'
 import { PermissionsService } from './services/permissions.service'
 import { SettingsService } from './services/settings.service'
 import { Toast, ToastService } from './services/toast.service'
-import {
-  FileStatus,
-  WebsocketStatusService,
-} from './services/websocket-status.service'
 
 describe('AppComponent', () => {
   let component: AppComponent
   let fixture: ComponentFixture<AppComponent>
   let tourService: TourService
-  let websocketStatusService: WebsocketStatusService
+  let consumerStatusService: ConsumerStatusService
   let permissionsService: PermissionsService
   let toastService: ToastService
   let router: Router
@@ -59,7 +59,7 @@ describe('AppComponent', () => {
     }).compileComponents()
 
     tourService = TestBed.inject(TourService)
-    websocketStatusService = TestBed.inject(WebsocketStatusService)
+    consumerStatusService = TestBed.inject(ConsumerStatusService)
     permissionsService = TestBed.inject(PermissionsService)
     settingsService = TestBed.inject(SettingsService)
     toastService = TestBed.inject(ToastService)
@@ -90,7 +90,7 @@ describe('AppComponent', () => {
     const toastSpy = jest.spyOn(toastService, 'show')
     const fileStatusSubject = new Subject<FileStatus>()
     jest
-      .spyOn(websocketStatusService, 'onDocumentConsumptionFinished')
+      .spyOn(consumerStatusService, 'onDocumentConsumptionFinished')
       .mockReturnValue(fileStatusSubject)
     component.ngOnInit()
     const status = new FileStatus()
@@ -109,7 +109,7 @@ describe('AppComponent', () => {
     const toastSpy = jest.spyOn(toastService, 'show')
     const fileStatusSubject = new Subject<FileStatus>()
     jest
-      .spyOn(websocketStatusService, 'onDocumentConsumptionFinished')
+      .spyOn(consumerStatusService, 'onDocumentConsumptionFinished')
       .mockReturnValue(fileStatusSubject)
     component.ngOnInit()
     fileStatusSubject.next(new FileStatus())
@@ -122,7 +122,7 @@ describe('AppComponent', () => {
     const toastSpy = jest.spyOn(toastService, 'show')
     const fileStatusSubject = new Subject<FileStatus>()
     jest
-      .spyOn(websocketStatusService, 'onDocumentDetected')
+      .spyOn(consumerStatusService, 'onDocumentDetected')
       .mockReturnValue(fileStatusSubject)
     component.ngOnInit()
     fileStatusSubject.next(new FileStatus())
@@ -136,7 +136,7 @@ describe('AppComponent', () => {
     const toastSpy = jest.spyOn(toastService, 'show')
     const fileStatusSubject = new Subject<FileStatus>()
     jest
-      .spyOn(websocketStatusService, 'onDocumentDetected')
+      .spyOn(consumerStatusService, 'onDocumentDetected')
       .mockReturnValue(fileStatusSubject)
     component.ngOnInit()
     fileStatusSubject.next(new FileStatus())
@@ -148,7 +148,7 @@ describe('AppComponent', () => {
     const toastSpy = jest.spyOn(toastService, 'showError')
     const fileStatusSubject = new Subject<FileStatus>()
     jest
-      .spyOn(websocketStatusService, 'onDocumentConsumptionFailed')
+      .spyOn(consumerStatusService, 'onDocumentConsumptionFailed')
       .mockReturnValue(fileStatusSubject)
     component.ngOnInit()
     fileStatusSubject.next(new FileStatus())

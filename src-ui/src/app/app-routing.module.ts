@@ -36,13 +36,7 @@ export const routes: Routes = [
     component: AppFrameComponent,
     canDeactivate: [DirtyDocGuard],
     children: [
-      {
-        path: 'dashboard',
-        component: DashboardComponent,
-        data: {
-          componentName: 'AppFrameComponent',
-        },
-      },
+      { path: 'dashboard', component: DashboardComponent },
       {
         path: 'documents',
         component: DocumentListComponent,
@@ -53,7 +47,6 @@ export const routes: Routes = [
             action: PermissionAction.View,
             type: PermissionType.Document,
           },
-          componentName: 'DocumentListComponent',
         },
       },
       {
@@ -66,7 +59,6 @@ export const routes: Routes = [
             action: PermissionAction.View,
             type: PermissionType.SavedView,
           },
-          componentName: 'DocumentListComponent',
         },
       },
       {
@@ -78,7 +70,6 @@ export const routes: Routes = [
             action: PermissionAction.View,
             type: PermissionType.Document,
           },
-          componentName: 'DocumentDetailComponent',
         },
       },
       {
@@ -90,7 +81,6 @@ export const routes: Routes = [
             action: PermissionAction.View,
             type: PermissionType.Document,
           },
-          componentName: 'DocumentDetailComponent',
         },
       },
       {
@@ -102,7 +92,6 @@ export const routes: Routes = [
             action: PermissionAction.View,
             type: PermissionType.Document,
           },
-          componentName: 'DocumentAsnComponent',
         },
       },
       {
@@ -114,7 +103,6 @@ export const routes: Routes = [
             action: PermissionAction.View,
             type: PermissionType.Tag,
           },
-          componentName: 'TagListComponent',
         },
       },
       {
@@ -126,7 +114,6 @@ export const routes: Routes = [
             action: PermissionAction.View,
             type: PermissionType.DocumentType,
           },
-          componentName: 'DocumentTypeListComponent',
         },
       },
       {
@@ -138,7 +125,6 @@ export const routes: Routes = [
             action: PermissionAction.View,
             type: PermissionType.Correspondent,
           },
-          componentName: 'CorrespondentListComponent',
         },
       },
       {
@@ -150,7 +136,6 @@ export const routes: Routes = [
             action: PermissionAction.View,
             type: PermissionType.StoragePath,
           },
-          componentName: 'StoragePathListComponent',
         },
       },
       {
@@ -159,7 +144,6 @@ export const routes: Routes = [
         canActivate: [PermissionsGuard],
         data: {
           requireAdmin: true,
-          componentName: 'LogsComponent',
         },
       },
       {
@@ -171,7 +155,6 @@ export const routes: Routes = [
             action: PermissionAction.Delete,
             type: PermissionType.Document,
           },
-          componentName: 'TrashComponent',
         },
       },
       // redirect old paths
@@ -197,7 +180,6 @@ export const routes: Routes = [
             action: PermissionAction.Change,
             type: PermissionType.UISettings,
           },
-          componentName: 'SettingsComponent',
         },
       },
       {
@@ -210,7 +192,6 @@ export const routes: Routes = [
             action: PermissionAction.View,
             type: PermissionType.UISettings,
           },
-          componentName: 'SettingsComponent',
         },
       },
       {
@@ -222,7 +203,6 @@ export const routes: Routes = [
             action: PermissionAction.Change,
             type: PermissionType.AppConfig,
           },
-          componentName: 'ConfigComponent',
         },
       },
       {
@@ -234,7 +214,6 @@ export const routes: Routes = [
             action: PermissionAction.View,
             type: PermissionType.PaperlessTask,
           },
-          componentName: 'TasksComponent',
         },
       },
       {
@@ -246,7 +225,6 @@ export const routes: Routes = [
             action: PermissionAction.View,
             type: PermissionType.CustomField,
           },
-          componentName: 'CustomFieldsComponent',
         },
       },
       {
@@ -258,7 +236,6 @@ export const routes: Routes = [
             action: PermissionAction.View,
             type: PermissionType.Workflow,
           },
-          componentName: 'WorkflowsComponent',
         },
       },
       {
@@ -270,7 +247,6 @@ export const routes: Routes = [
             action: PermissionAction.View,
             type: PermissionType.MailAccount,
           },
-          componentName: 'MailComponent',
         },
       },
       {
@@ -282,7 +258,6 @@ export const routes: Routes = [
             action: PermissionAction.View,
             type: PermissionType.User,
           },
-          componentName: 'UsersAndGroupsComponent',
         },
       },
       {
@@ -294,7 +269,6 @@ export const routes: Routes = [
             action: PermissionAction.View,
             type: PermissionType.SavedView,
           },
-          componentName: 'SavedViewsComponent',
         },
       },
     ],

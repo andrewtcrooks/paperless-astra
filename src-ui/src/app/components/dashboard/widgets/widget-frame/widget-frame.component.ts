@@ -1,5 +1,4 @@
 import { DragDropModule } from '@angular/cdk/drag-drop'
-import { NgTemplateOutlet } from '@angular/common'
 import { AfterViewInit, Component, Input } from '@angular/core'
 import { NgxBootstrapIconsModule } from 'ngx-bootstrap-icons'
 import { LoadingComponentWithPermissions } from 'src/app/components/loading-component/loading.component'
@@ -8,7 +7,7 @@ import { LoadingComponentWithPermissions } from 'src/app/components/loading-comp
   selector: 'pngx-widget-frame',
   templateUrl: './widget-frame.component.html',
   styleUrls: ['./widget-frame.component.scss'],
-  imports: [DragDropModule, NgxBootstrapIconsModule, NgTemplateOutlet],
+  imports: [DragDropModule, NgxBootstrapIconsModule],
 })
 export class WidgetFrameComponent
   extends LoadingComponentWithPermissions
@@ -26,9 +25,6 @@ export class WidgetFrameComponent
 
   @Input()
   draggable: any
-
-  @Input()
-  cardless: boolean = false
 
   ngAfterViewInit(): void {
     setTimeout(() => {

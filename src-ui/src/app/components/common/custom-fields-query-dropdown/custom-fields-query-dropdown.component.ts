@@ -34,10 +34,9 @@ import {
   CustomFieldQueryElement,
   CustomFieldQueryExpression,
 } from 'src/app/utils/custom-field-query-element'
-import { pngxPopperOptions } from 'src/app/utils/popper-options'
+import { popperOptionsReenablePreventOverflow } from 'src/app/utils/popper-options'
 import { LoadingComponentWithPermissions } from '../../loading-component/loading.component'
 import { ClearableBadgeComponent } from '../clearable-badge/clearable-badge.component'
-import { DocumentLinkComponent } from '../input/document-link/document-link.component'
 
 export class CustomFieldQueriesModel {
   public queries: CustomFieldQueryElement[] = []
@@ -168,7 +167,6 @@ export class CustomFieldQueriesModel {
   imports: [
     ClearableBadgeComponent,
     FormsModule,
-    DocumentLinkComponent,
     ReactiveFormsModule,
     NgbDatepickerModule,
     NgTemplateOutlet,
@@ -183,7 +181,7 @@ export class CustomFieldsQueryDropdownComponent extends LoadingComponentWithPerm
   public CustomFieldDataType = CustomFieldDataType
   public CUSTOM_FIELD_QUERY_MAX_DEPTH = CUSTOM_FIELD_QUERY_MAX_DEPTH
   public CUSTOM_FIELD_QUERY_MAX_ATOMS = CUSTOM_FIELD_QUERY_MAX_ATOMS
-  public popperOptions = pngxPopperOptions
+  public popperOptions = popperOptionsReenablePreventOverflow
 
   @Input()
   title: string
@@ -242,8 +240,6 @@ export class CustomFieldsQueryDropdownComponent extends LoadingComponentWithPerm
   selectionModelChange = new EventEmitter<CustomFieldQueriesModel>()
 
   customFields: CustomField[] = []
-
-  public readonly today: string = new Date().toISOString().split('T')[0]
 
   constructor(protected customFieldsService: CustomFieldsService) {
     super()

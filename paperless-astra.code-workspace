@@ -1,0 +1,67 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "./src",
+			"name": "Backend"
+		},
+		{
+			"path": "./src-ui",
+			"name": "Frontend"
+		},
+		{
+			"path": "./.github",
+			"name": "CI/CD"
+		},
+		{
+			"path": "./docs",
+			"name": "Documentation"
+		}
+
+	],
+	"settings": {
+		"files.exclude": {
+			"**/__pycache__": true,
+			"**/.mypy_cache": true,
+			"**/.ruff_cache": true,
+			"**/.pytest_cache": true,
+			"**/.idea": true,
+			"**/.venv": true,
+			"**/.coverage": true,
+			"**/coverage.json": true
+		},
+		"python.defaultInterpreterPath": "./venv/bin/python",
+		"python.analysis.extraPaths": [
+			"./src"
+		],
+		"files.associations": {
+			"*.html": "django-html"
+		},
+		"[python]": {
+			"editor.defaultFormatter": "ms-python.black-formatter",
+			"editor.formatOnSave": true,
+			"editor.codeActionsOnSave": {
+				"source.organizeImports": true
+			}
+		},
+		"[javascript]": {
+			"editor.defaultFormatter": "esbenp.prettier-vscode"
+		},
+		"[typescript]": {
+			"editor.defaultFormatter": "esbenp.prettier-vscode"
+		},
+		"python.testing.pytestEnabled": true,
+		"python.testing.unittestEnabled": false,
+		"python.testing.nosetestsEnabled": false,
+		"python.testing.pytestArgs": [
+			"src"
+		],
+		"typescript.tsdk": "src-ui/node_modules/typescript/lib"
+	},
+	"extensions": {
+		"recommendations": ["ms-python.python", "charliermarsh.ruff", "editorconfig.editorconfig"],
+		"unwantedRecommendations": ["ms-python.black-formatter"]
+	}
+}

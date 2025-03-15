@@ -25,6 +25,5 @@
 ./docs
 ./dist
 ./scripts
-./resources
 # Other stuff
 **/*.drawio.png

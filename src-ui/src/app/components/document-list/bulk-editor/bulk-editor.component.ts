@@ -268,9 +268,6 @@ export class BulkEditorComponent
       .pipe(first())
       .subscribe({
         next: () => {
-          if (args['delete_originals']) {
-            this.list.selected.clear()
-          }
           this.list.reload()
           this.list.reduceSelectionToFilter()
           this.list.selected.forEach((id) => {
@@ -856,9 +853,6 @@ export class BulkEditorComponent
         }
         if (mergeDialog.deleteOriginals) {
           args['delete_originals'] = true
-        }
-        if (mergeDialog.archiveFallback) {
-          args['archive_fallback'] = true
         }
         mergeDialog.buttonsEnabled = false
         this.executeBulkOperation(modal, 'merge', args, mergeDialog.documentIDs)

@@ -84,7 +84,7 @@ export class SplitConfirmDialogComponent
   addSplit() {
     if (this.page === this.totalPages) return
     this.pages.add(this.page)
-    this.pages = new Set(Array.from(this.pages).sort((a, b) => a - b))
+    this.pages = new Set(Array.from(this.pages).sort())
     this.confirmButtonEnabled = this.pages.size > 0
   }
 

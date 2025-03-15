@@ -2,11 +2,11 @@ import { HttpEventType } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { FileSystemFileEntry, NgxFileDropEntry } from 'ngx-file-drop'
 import { Subscription } from 'rxjs'
-import { DocumentService } from './rest/document.service'
 import {
+  ConsumerStatusService,
   FileStatusPhase,
-  WebsocketStatusService,
-} from './websocket-status.service'
+} from './consumer-status.service'
+import { DocumentService } from './rest/document.service'
 
 @Injectable({
   providedIn: 'root',
@@ -16,7 +16,7 @@ export class UploadDocumentsService {
 
   constructor(
     private documentService: DocumentService,
-    private websocketStatusService: WebsocketStatusService
+    private consumerStatusService: ConsumerStatusService
   ) {}
 
   onNgxFileDrop(files: NgxFileDropEntry[]) {
@@ -37,8 +37,7 @@ export class UploadDocumentsService {
   private uploadFile(file: File) {
     let formData = new FormData()
     formData.append('document', file, file.name)
-    formData.append('from_webui', 'true')
-    let status = this.websocketStatusService.newFileUpload(file.name)
+    let status = this.consumerStatusService.newFileUpload(file.name)
 
     status.message = $localize`Connecting...`
 
@@ -62,11 +61,11 @@ export class UploadDocumentsService {
         error: (error) => {
           switch (error.status) {
             case 400: {
-              this.websocketStatusService.fail(status, error.error.document)
+              this.consumerStatusService.fail(status, error.error.document)
               break
             }
             default: {
-              this.websocketStatusService.fail(
+              this.consumerStatusService.fail(
                 status,
                 $localize`HTTP error: ${error.status} ${error.statusText}`
               )

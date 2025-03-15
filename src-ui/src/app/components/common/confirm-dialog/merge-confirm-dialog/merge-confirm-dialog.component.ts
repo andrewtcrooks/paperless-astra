@@ -29,7 +29,6 @@ export class MergeConfirmDialogComponent
   implements OnInit
 {
   public documentIDs: number[] = []
-  public archiveFallback: boolean = false
   public deleteOriginals: boolean = false
   private _documents: Document[] = []
   get documents(): Document[] {

@@ -92,3 +92,43 @@
 
 #PAPERLESS_CONVERT_BINARY=/usr/bin/convert
 #PAPERLESS_GS_BINARY=/usr/bin/gs
+
+# Paperless-Astra Configuration Example
+# Copy this file to paperless.conf and modify it to suit your needs.
+
+# The following settings are required for basic functionality:
+
+# Specify the time zone documents will be parsed with
+PAPERLESS_TIME_ZONE=America/Los_Angeles
+
+# AI and LLM Settings
+
+# Vector Search
+PAPERLESS_VECTOR_SEARCH_ENABLED=1
+PAPERLESS_CHROMA_DB_ENDPOINT=http://chromadb:8000
+
+# LLM Provider Configuration
+PAPERLESS_LLM_PROVIDER=openai  # Options: openai, anthropic, local
+PAPERLESS_LLM_MODEL=gpt-4  # Model name for text tasks
+PAPERLESS_VISION_LLM_PROVIDER=openai  # Options: openai, local
+PAPERLESS_VISION_LLM_MODEL=gpt-4-vision-preview  # Model for vision/OCR tasks
+
+# API Keys (if using cloud providers)
+PAPERLESS_OPENAI_API_KEY=your_openai_api_key_here
+PAPERLESS_ANTHROPIC_API_KEY=your_anthropic_api_key_here
+
+# Local LLM Configuration (if using local models)
+PAPERLESS_LOCAL_LLM_ENDPOINT=http://localhost:8080  # For LM Studio
+#PAPERLESS_LOCAL_LLM_ENDPOINT=http://localhost:11434  # For Ollama
+
+# Model Management
+PAPERLESS_LLM_BATCH_SIZE=10  # Number of documents to process in one batch
+PAPERLESS_LLM_CACHE_ENABLED=1
+PAPERLESS_LLM_CACHE_TIMEOUT=3600  # Cache timeout in seconds
+
+# Advanced LLM Settings
+PAPERLESS_LLM_MAX_TOKENS=4000
+PAPERLESS_LLM_TEMPERATURE=0.7
+PAPERLESS_LLM_TOP_P=0.95
+PAPERLESS_LLM_MAX_RETRIES=3
+PAPERLESS_LLM_TIMEOUT=30  # Timeout in seconds

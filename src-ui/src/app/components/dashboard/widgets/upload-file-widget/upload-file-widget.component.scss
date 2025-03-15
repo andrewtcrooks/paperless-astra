@@ -1,13 +1,5 @@
-:host ::ng-deep i-bs svg {
-  margin-top: -3px;
-}
-
-.btn-outline-dark {
-  --bs-btn-border-color: var(--bs-border-color-translucent);
-}
-
-.smaller {
-  font-size: 0.75rem;
+form {
+  position: relative;
 }
 
 .alert-heading {
@@ -48,10 +40,6 @@
   background-color: rgba(var(--bs-body-bg-rgb), .95) !important;
 }
 
-.consumer-status-list {
-  max-height: calc(100vh - 312px); // e.g. below the upload button, mobile
-
-  @media screen and (min-width: 768px) {
-    max-height: calc(100vh - 208px); // e.g. below the upload button
-  }
+.max-vh100-40 {
+  max-height: calc(100vh - 40px);
 }
