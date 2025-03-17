@@ -13,7 +13,7 @@ services:
       - redisdata:/data
 
   db:
-    image: mariadb:10.11
+    image: mariadb:11.7
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "mariadb", "-upaperess", "-ppaperless", "-e", "SELECT 1;"]
