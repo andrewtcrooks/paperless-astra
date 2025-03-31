@@ -52,7 +52,7 @@ services:
       - "9998:9998"
 
   gotenberg:
-    image: gotenberg/gotenberg:7.10
+    image: gotenberg/gotenberg:8.19
     restart: unless-stopped
     command:
       - "gotenberg"
